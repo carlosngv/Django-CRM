@@ -7,6 +7,27 @@
     text-align: center;
 }
 
-.order  a {
-    color: #1e3af3;
+#customer-total-orders {
+    font-size: 30px;
+    text-align: center;
+}
+
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+
+    background: rgba(34, 35, 38, 0.57);
+    text-align: center;
+}
+
+footer > p {
+    color: rgb(228, 226, 226);
+    margin: 15px auto;
+}
+
+.container {
+    margin: 30px auto;
 }

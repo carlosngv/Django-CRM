@@ -9,10 +9,10 @@
     <div class="row">
         <div class="col">
             <div class="card">
-                <div class="card-header text-center"><strong>Customer</strong></div>
+                <div class="card-header text-center"><strong>Customer: {{customer.name}}</strong></div>
                 <div class="card-body">
-                    <button class="btn btn-block btn-primary">Update Customer</button>
-                    <button class="btn btn-block btn-danger">Delete Customer</button>
+                    <button class="btn btn-block btn-info">Update Customer</button>
+                    <button class="btn btn-block btn-primary">Delete Customer</button>
                 </div>
             </div>
         </div>
@@ -20,16 +20,18 @@
             <div class="card">
                 <div class="card-header text-center"><strong>Contact Information</strong></div>
                 <div class="card-body">
-                    <label>Email:</label>
+                    <label>Email: {{customer.email}}</label>
                     <br>
-                    <label>Phone:</label>
+                    <label>Phone: {{customer.phone}}</label>
                 </div>
             </div>
         </div>
         <div class="col">
             <div class="card">
                 <div class="card-header text-center"><strong>Total Orders</strong></div>
-                <div class="card-body"></div>
+                <div class="card-body" id="customer-total-orders">
+                    {{customer_orders}}
+                </div>
             </div>
         </div>
     </div>
@@ -38,7 +40,7 @@
         <div class="col">
             <div class="card card-body">
                 <form method="get">
-                    <button class="btn btn-primary">Search</button>
+                    <button class="btn btn-info">Search</button>
                 </form>
             </div>
         </div>
@@ -56,6 +58,16 @@
                         <th>Update</th>
                         <th>Remove</th>
                     </tr>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{order.product}}</td>
+                        <td>{{order.product.category}}</td>
+                        <td>{{order.product.date_created}}</td>
+                        <td>{{order.status}}</td>
+                        <td><a class="btn btn-sm btn-info" href="{% url 'update_order' order.id %}">Update</a></td>
+                        <td><a class="btn btn-sm btn-primary" href="{% url 'delete_order' order.id %}">Delete</a></td>
+                    </tr>
+                    {% endfor %}
                 </table>
             </div>
         </div>
