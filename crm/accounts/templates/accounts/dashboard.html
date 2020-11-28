@@ -1,0 +1,83 @@
+{% extends 'accounts/main.html' %}
+
+
+{% block content %}
+
+{% include 'accounts/status.html' %}
+
+<br>
+<div class="container-fluid m-10">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Customers:</h3>
+            <hr>
+            <div class="card">
+                <div class="card-body">
+                    <button class="btn btn-info btn-block">Create Order</button>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Customer
+                                </th>
+                                <th scope="col">
+                                    Phone
+                                </th>
+                            </tr>
+                            {% for customer in customers %}
+                            <tr>
+                                <td>{{customer.name}}</td>
+                                <td>{{customer.phone}}</td>
+                            </tr>
+                            {% endfor %}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <h3>Last 5 orders:</h3>
+            <hr>
+            <div class="card">
+                <div class="card-body">
+                    <button class="btn btn-info btn-block">Create Order</button>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Product
+                                </th>
+                                <th scope="col">
+                                    Date ordered
+                                </th>
+                                <th scope="col">
+                                    Status
+                                </th>
+                                <th scope="col">
+                                    Update
+                                </th>
+                                <th scope="col">
+                                    Remove
+                                </th>
+                            </tr>
+
+                            {% for order in orders %}
+                            <tr class="order">
+                                <td>{{order.product}}</td>
+                                <td>{{order.date_created}}</td>
+                                <td>{{order.status}}</td>
+                                <td><a href="">Update</a></td>
+                                <td><a href="">Delete</a></td>
+                            </tr>
+                            {% endfor %}
+
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+</div>
+
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'accounts/main.html' %}
+
+
+{% block content %}
+
+
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header text-center"><strong>Customer</strong></div>
+                <div class="card-body">
+                    <button class="btn btn-block btn-primary">Update Customer</button>
+                    <button class="btn btn-block btn-danger">Delete Customer</button>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-header text-center"><strong>Contact Information</strong></div>
+                <div class="card-body">
+                    <label>Email:</label>
+                    <br>
+                    <label>Phone:</label>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-header text-center"><strong>Total Orders</strong></div>
+                <div class="card-body"></div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <div class="card card-body">
+                <form method="get">
+                    <button class="btn btn-primary">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <div class="card card-body">
+                <table class="table">
+                    <tr>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Date Ordered</th>
+                        <th>Status</th>
+                        <th>Update</th>
+                        <th>Remove</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
