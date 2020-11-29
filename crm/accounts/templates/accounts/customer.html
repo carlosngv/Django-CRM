@@ -11,8 +11,8 @@
             <div class="card">
                 <div class="card-header text-center"><strong>Customer: {{customer.name}}</strong></div>
                 <div class="card-body">
-                    <button class="btn btn-block btn-info">Update Customer</button>
-                    <button class="btn btn-block btn-primary">Delete Customer</button>
+                    <a href="" class="btn btn-block btn-dark">Update customer</a>
+                    <a href="{% url 'create_order' customer.id %}" class="btn btn-block btn-warning">Place order</a>
                 </div>
             </div>
         </div>
@@ -40,7 +40,11 @@
         <div class="col">
             <div class="card card-body">
                 <form method="get">
-                    <button class="btn btn-info">Search</button>
+
+                    {{filter.form}}
+
+                    <button class="btn btn-primary">Search</button>
+                    
                 </form>
             </div>
         </div>
@@ -64,8 +68,8 @@
                         <td>{{order.product.category}}</td>
                         <td>{{order.product.date_created}}</td>
                         <td>{{order.status}}</td>
-                        <td><a class="btn btn-sm btn-info" href="{% url 'update_order' order.id %}">Update</a></td>
-                        <td><a class="btn btn-sm btn-primary" href="{% url 'delete_order' order.id %}">Delete</a></td>
+                        <td><a class="btn btn-sm btn-dark" href="{% url 'update_order' order.id %}">Update</a></td>
+                        <td><a class="btn btn-sm btn-warning" href="{% url 'delete_order' order.id %}">Delete</a></td>
                     </tr>
                     {% endfor %}
                 </table>
