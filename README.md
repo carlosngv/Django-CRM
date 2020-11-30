@@ -7,4 +7,6 @@ Esto es una simple aplicación web basado en un CRM que cumple con las funciones
   * Productos 
   * Ordenes
   
-  Realizado con fines prácticos.
+Se utilizó el framework CSS Bootstrap para su maquetación.
+
+Realizado con fines prácticos...
