@@ -31,3 +31,32 @@ footer > p {
 .container {
     margin: 30px auto;
 }
+
+.register-form-container {
+    margin: 100px 500px;
+
+}
+
+.form-group input {
+    width:100%;
+    outline: 0px !important;
+    border: 0px !important;
+}
+
+
+.message {
+    display: flex;
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+    background: #4f5d6a;
+    color: white;
+    height: 40px;
+    font-weight: 700;
+    margin-bottom: -20px;
+}
+
+#welcome-msg {
+    margin-right: 10px;
+    font-weight: 700;
+}

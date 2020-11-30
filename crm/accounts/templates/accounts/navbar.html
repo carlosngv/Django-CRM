@@ -16,4 +16,8 @@
         </li>
       </ul>
     </div>
+
+    <span id="welcome-msg">Welcome, {{ request.user }}</span>
+    <span><a href="{% url 'logout' %}">Logout</a></span>
+
   </nav>
