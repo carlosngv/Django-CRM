@@ -1,5 +1,11 @@
-.status {
-    background:linear-gradient(to bottom, #83b5eb, #2196f3);
+.status1 {
+    background:linear-gradient(to bottom, #a7c8eb, #9bd2ff);
+}
+.status2 {
+    background:linear-gradient(to bottom, #93bce8, #7fb6e2);
+}
+.status3 {
+    background:linear-gradient(to bottom, #8ab6e4, #56aef7);
 }
 
 .status .status-content {
@@ -59,4 +65,10 @@ footer > p {
 #welcome-msg {
     margin-right: 10px;
     font-weight: 700;
+    color: white;
+}
+
+#logout {
+    color: #ccc;
+    text-decoration: none;
 }

@@ -2,8 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Product, Customer, Order
 
+# Decorators
+from .decorators import unauthenticated_user, allowed_users, admin_only
+
 # Class based forms
-from .forms import OrderForm, CreateUserForm
+from .forms import OrderForm, CreateUserForm, CustomerForm
 
 # Rapid form creators instead of using a class based form
 from django.forms import inlineformset_factory, modelformset_factory
@@ -14,33 +17,47 @@ from .filters import OrderFilter
 # Allows us to block pages when user is not logged.
 from django.contrib.auth.decorators import login_required
 
+# Group model from admin
+from django.contrib.auth.models import Group
+
 # Allows us to perform auth actions
 from django.contrib.auth import authenticate, login, logout
 
 # For displaying messages to the user
 from django.contrib import messages
 
-def register(request):
 
-    # Blocks access to register when user is authenticated
-    if request.user.is_authenticated:
-        return redirect('home')
-    
+''' DECORATORS USED
+Custom decoraters were implemented: 
+
+    * @unauthenticated_user
+    * @allowed_users(allowed_roles=['admin'])
+    * @admin_only
+
+These restrict views if user isn't admin or is not logged
+'''
+
+
+@unauthenticated_user
+def register(request):
     form = CreateUserForm()
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            form.save()
-            user = form.cleaned_data.get('username')
-            messages.success(request, 'Account was created for ' + user)
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            # Associating user with a group
+            group = Group.objects.get(name='customer')
+            user.groups.add(group)
+            messages.success(request, 'Account was created for ' + username)
             return redirect('login')
-    context = { 'form': form }
+    context = {'form': form}
     return render(request, 'accounts/register.html', context)
 
+
+# decorator that blocks access to register when user is authenticated
+@unauthenticated_user
 def login_page(request):
-    # Blocks access to register when user is authenticated
-    if request.user.is_authenticated:
-        return redirect('home')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -55,12 +72,30 @@ def login_page(request):
     context = {}
     return render(request, 'accounts/login.html', context)
 
+
 def logout_user(request):
     logout(request)
     return redirect('login')
 
-# This decorator restricts pages to users that aren't logged
+
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def user(request):
+    orders = request.user.customer.order_set.all()
+    total_orders = orders.count()
+    orders_delivered = orders.filter(status='Delivered').count()
+    orders_pending = orders.filter(status='Pending').count()
+    context = {
+        'orders': orders,
+        'orders_delivered': orders_delivered,
+        'orders_pending': orders_pending,
+        'total_orders': total_orders
+    }
+    return render(request, 'accounts/user.html', context)
+
+
+@login_required(login_url='login')
+@admin_only
 def home(request):
     orders = Order.objects.all()
     customers = Customer.objects.all()
@@ -79,7 +114,9 @@ def home(request):
 
     return render(request, 'accounts/dashboard.html', context)
 
+
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def products(request):
     products = Product.objects.all()
     context = {
@@ -87,13 +124,15 @@ def products(request):
     }
     return render(request, 'accounts/products.html', context)
 
+
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def customer(request, pk):
     customer = Customer.objects.get(id=pk)
     orders = customer.order_set.all()
     customer_orders = orders.count()
 
-    filter = OrderFilter(request.GET, queryset = orders)
+    filter = OrderFilter(request.GET, queryset=orders)
     orders = filter.qs
 
     context = {
@@ -106,10 +145,12 @@ def customer(request, pk):
 
 
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def create_order(request, pk):
-    OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=1)
+    OrderFormSet = inlineformset_factory(
+        Customer, Order, fields=('product', 'status'), extra=1)
     customer = Customer.objects.get(id=pk)
-    form_set = OrderFormSet(queryset=Order.objects.none(),instance=customer)
+    form_set = OrderFormSet(queryset=Order.objects.none(), instance=customer)
 
     if request.method == 'POST':
         form_set = OrderFormSet(request.POST, instance=customer)
@@ -123,7 +164,9 @@ def create_order(request, pk):
     }
     return render(request, 'accounts/order_form.html', context)
 
+
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def update_order(request, pk):
     order = Order.objects.get(id=pk)
     form = OrderForm(instance=order)
@@ -133,15 +176,17 @@ def update_order(request, pk):
         if form.is_valid():
             form.save()
             return redirect('/')
-    
+
     context = {
         'form': form
     }
     return render(request, 'accounts/order_form.html', context)
 
+
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def delete_order(request, pk):
-    order = Order.objects.get(id=pk)    
+    order = Order.objects.get(id=pk)
 
     if request.method == 'POST':
         order.delete()
@@ -150,3 +195,15 @@ def delete_order(request, pk):
         'order': order
     }
     return render(request, 'accounts/delete.html', context)
+
+
+def update_user(request, pk):
+    customer = Customer.objects.get(id=pk)
+    form = CustomerForm(instance=customer)
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, instance=customer)
+        if form.is_valid():
+            form.save()
+            return redirect('customer/' + pk)
+    context = {}
+    return render(request, 'accounts/customer_form.html', context)
