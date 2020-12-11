@@ -79,7 +79,20 @@ def logout_user(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['customer'])
+def account_settings(request):
+    customer = request.user.customer
+    form = CustomerForm(instance=customer)
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, request.FILES, instance=customer)
+        if form.is_valid():
+            form.save()
+    context = {'form': form}
+    return render(request, 'accounts/account_settings.html', context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer'])
 def user(request):
     orders = request.user.customer.order_set.all()
     total_orders = orders.count()
@@ -197,6 +210,8 @@ def delete_order(request, pk):
     return render(request, 'accounts/delete.html', context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def update_user(request, pk):
     customer = Customer.objects.get(id=pk)
     form = CustomerForm(instance=customer)

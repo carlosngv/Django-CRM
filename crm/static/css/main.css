@@ -18,7 +18,15 @@
     text-align: center;
 }
 
+.pic-container {
+    display: flex;
+    justify-content: center;
+}
 
+.profile-pic {
+    width: 50%;
+    height: 50%;
+}
 footer {
     position: absolute;
     bottom: 0;
